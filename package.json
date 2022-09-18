@@ -1,14 +1,14 @@
 {
-  "name": "module-linker",
+  "name": "modules-sync",
   "version": "0.0.1",
-  "description": "Automatically link a module locally",
+  "description": "Automatically synchronize git modules locally",
   "main": "src/index.js",
   "scripts": {
     "test": "node test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Geckos-Ink/node-module-linker.git"
+    "url": "git+https://github.com/Geckos-Ink/node-modules-sync.git"
   },
   "keywords": [
     "git",
@@ -21,9 +21,9 @@
   "author": "cekkr@GitHub",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Geckos-Ink/node-module-linker/issues"
+    "url": "https://github.com/Geckos-Ink/node-modules-sync/issues"
   },
-  "homepage": "https://github.com/Geckos-Ink/node-module-linker#readme",
+  "homepage": "https://github.com/Geckos-Ink/node-modules-sync#readme",
   "dependencies": {
     "dir-compare": "^4.0.0",
     "fs-extra": "^10.1.0",
