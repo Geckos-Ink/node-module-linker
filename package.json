@@ -1,0 +1,30 @@
+{
+  "name": "module-linker",
+  "version": "0.0.1",
+  "description": "Automatically link a module locally",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Geckos-Ink/node-module-linker.git"
+  },
+  "keywords": [
+    "git",
+    "module",
+    "link",
+    "local",
+    "directory",
+    "watch"
+  ],
+  "author": "cekkr@GitHub",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Geckos-Ink/node-module-linker/issues"
+  },
+  "homepage": "https://github.com/Geckos-Ink/node-module-linker#readme",
+  "dependencies": {
+    "node-watch": "^0.7.3"
+  }
+}
