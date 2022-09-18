@@ -2,6 +2,9 @@ const fs = require('fs-extra')
 const watch = require('node-watch');
 const dircompare = require('dir-compare');
 
+require('./extensions');
+const ModuleDB = require('./moduleDb');
+
 let cwd = process.cwd();
 
 let mods = {};
@@ -57,15 +60,6 @@ try {
     }
 } catch(err) {
     console.error("module-linker error:", err);
-}
-
-///
-/// Extensions
-///
-if(!String.prototype.replaceAll){
-    String.prototype.replaceAll = function(from, to){
-        return this.split(from).join(to);
-    }
 }
 
 
@@ -155,6 +149,8 @@ for(let m in mods){
                 alreadyWorkingOn = false;
             });
         }
+
+        dirsCompareAndCopy();
 
         watch(mod.origin, { recursive: true }, function(evt, name) {
             dirsCompareAndCopy();

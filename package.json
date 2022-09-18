@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Geckos-Ink/node-modules-sync#readme",
   "dependencies": {
+    "better-sqlite3": "^7.6.2",
     "dir-compare": "^4.0.0",
     "fs-extra": "^10.1.0",
     "node-watch": "^0.7.3"
