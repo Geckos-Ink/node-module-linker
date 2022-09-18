@@ -1,10 +1,13 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const watch = require('node-watch');
 
 let cwd = process.cwd();
 
 let mods = {};
 
+///
+/// Read local-linked-modules.txt
+///
 function trimDir(dir){
     function ignoreChars(ch){
         return ch==' ' || ch=='\r';
@@ -55,4 +58,25 @@ try {
     console.error("module-linker error:", err);
 }
 
+///
+/// Begin the modules sync
+///
 console.log(mods);
+
+for(let m in mods){
+    let mod = mods[m];
+
+    if(!fs.existsSync(mod.module)){
+        // To copy a folder or file, select overwrite accordingly
+        try {
+            fs.copySync(mod.origin, mod.module, { overwrite: true|false })
+            console.log('success!')
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    watch(mod.origin, { recursive: true }, function(evt, name) {
+        console.log('%s changed.', name);
+    });
+}
