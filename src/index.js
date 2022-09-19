@@ -122,14 +122,28 @@ for(let m in mods){
                     let path = (baseDir.replaceAll('\\','/') + '/' + name).replaceAll('//','/');
 
                     //let mostRecentDate = dateOrigin > dateModule ? dateOrigin : dateModule;
+                    let dbFile = mod.db.getFile(path);
                     
-                    if(file.state != 'equal'){
-                        let notDeleted = true;
+                    let notDeleted = true;
 
+                    if(file.state != 'equal'){
+                        
                         // Check if deleted
                         if(file.type1=='missing' || file.type2=='missing'){
-                            let dbFile = mod.db.getFile(path);
-                            
+
+                            if(dbFile){
+                                if(dateOrigin <= dbFile.date1 && dateModule <= dbFile.date2){
+                                    // file deleted
+                                    let whereToDelete = (file.type1 == 'missing' ? mod.module : mod.origin) + path;
+                                    
+                                    console.log("Deleted", path, "removing also", whereToDelete);
+
+                                    fs.removeSync(whereToDelete);
+                                    mod.db.removeFile(dbFile.id);
+
+                                    notDeleted = false;
+                                }
+                            }
                         }
 
                         if(notDeleted){
@@ -153,6 +167,14 @@ for(let m in mods){
                                     dirsAlreadyDone.push(path);
                             }
                         }
+                    }
+
+                    if(notDeleted){
+                        let date1 = file.date1 || file.date2;
+                        let date2 = file.date2 || file.date1;
+
+                        if(!dbFile || dbFile.date1 != date1 || dbFile.date2 != date2)
+                            mod.db.setFileDate(path, date1, date2);
                     }
                 }
 

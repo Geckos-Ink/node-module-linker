@@ -105,3 +105,6 @@ dist
 
 # Project examples
 test-module/
+
+# Modules DB
+src/DBs/*
