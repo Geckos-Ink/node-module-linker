@@ -1,8 +1,8 @@
 # modules-sync
 
-##### Automatically synchronize git (and not) modules locally.
+### Automatically synchronize git (and not) modules locally.
 
-This is a work in progress. **Version: 0.1.2**
+This is a work in progress. **Version: 0.1.3**
 
 ## Install
 
