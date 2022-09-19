@@ -2,7 +2,7 @@
 
 ##### Automatically synchronize git (and not) modules locally.
 
-This is a work in progress. **Version: 0.1.0**
+This is a work in progress. **Version: 0.1.2**
 
 ## Install
 
