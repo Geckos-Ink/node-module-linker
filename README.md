@@ -1,7 +1,7 @@
 # modules-sync
 
 ### Automatically synchronize git (and not) submodules locally.
-Useful if you are working to a project and at the same time to a its module/submodule.
+Useful if you are working to a project and at the same time to a its module or submodule on the same computer.
 
 This is a work in progress. **Version: 0.1.3**
 
