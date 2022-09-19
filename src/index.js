@@ -2,6 +2,8 @@ const fs = require('fs-extra')
 const watch = require('node-watch');
 const dircompare = require('dir-compare');
 
+global.talker = true;
+
 require('./extensions');
 const ModuleDB = require('./moduleDb');
 
@@ -71,6 +73,8 @@ console.log(mods);
 for(let m in mods){
     let mod = mods[m];
 
+    mod.db = new ModuleDB(cwd + '/' + mod.module);
+
     // If not exist, simply copy it
     if(!fs.existsSync(mod.module)){
         // To copy a folder or file, select overwrite accordingly
@@ -117,27 +121,37 @@ for(let m in mods){
                     let dateModule = file.date2 || new Date(0);
                     let path = (baseDir.replaceAll('\\','/') + '/' + name).replaceAll('//','/');
 
-                    let mostRecentDate = dateOrigin > dateModule ? dateOrigin : dateModule;
-
+                    //let mostRecentDate = dateOrigin > dateModule ? dateOrigin : dateModule;
+                    
                     if(file.state != 'equal'){
-                        let yetDone = false;
+                        let notDeleted = true;
 
-                        for(let dirDone of dirsAlreadyDone){
-                            if(path.startsWith(dirDone)){
-                                yetDone = true;
-                                break;
-                            }
+                        // Check if deleted
+                        if(file.type1=='missing' || file.type2=='missing'){
+                            let dbFile = mod.db.getFile(path);
+                            
                         }
 
-                        if(!yetDone){
-                            let from    = (dateOrigin > dateModule ? mod.origin : mod.module) + path;
-                            let to      = (dateOrigin > dateModule ? mod.module : mod.origin) + path;
+                        if(notDeleted){
+                            let yetDone = false;
 
-                            fs.copySync(from, to, { overwrite: true });
-                            console.log(from, "copied to", to);
+                            for(let dirDone of dirsAlreadyDone){
+                                if(path.startsWith(dirDone)){
+                                    yetDone = true;
+                                    break;
+                                }
+                            }
 
-                            if(type == 'dir')
-                                dirsAlreadyDone.push(path);
+                            if(!yetDone){
+                                let from    = (dateOrigin > dateModule ? mod.origin : mod.module) + path;
+                                let to      = (dateOrigin > dateModule ? mod.module : mod.origin) + path;
+
+                                fs.copySync(from, to, { overwrite: true });
+                                console.log(from, "copied to", to);
+
+                                if(type == 'dir')
+                                    dirsAlreadyDone.push(path);
+                            }
                         }
                     }
                 }
