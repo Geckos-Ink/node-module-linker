@@ -4,7 +4,7 @@
   "description": "Automatically synchronize git modules locally",
   "main": "src/index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js --modules-sync-talker"
   },
   "repository": {
     "type": "git",
@@ -29,5 +29,8 @@
     "dir-compare": "^4.0.0",
     "fs-extra": "^10.1.0",
     "node-watch": "^0.7.3"
+  },
+  "bin": {
+    "modules-sync": "./bin/modules-sync.js"
   }
 }

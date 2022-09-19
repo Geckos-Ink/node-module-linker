@@ -2,7 +2,12 @@ const fs = require('fs-extra')
 const watch = require('node-watch');
 const dircompare = require('dir-compare');
 
-global.talker = true;
+global.talker = false;
+for(let arg of process.argv){ // set talket true if requested in arguments
+    if(arg == '--modules-sync-talker'){
+        global.talker = true;
+    }
+}
 
 require('./extensions');
 const ModuleDB = require('./moduleDb');
@@ -42,20 +47,28 @@ function trimDir(dir){
 
 function readLocalTxt(str){
     for(let line of str.split('\n')){
-        let spl = line.split('=>');
+        try{
+            let spl = line.split('=>');
 
-        let origin = trimDir(spl[1]);
-        let module = trimDir(spl[0]);
+            if(spl.length>1){
+                let origin = trimDir(spl[1]);
+                let module = trimDir(spl[0]);
 
-        mods[module] = {
-            module,
-            origin
-        };
+                mods[module] = {
+                    module,
+                    origin
+                };
+            }
+        }
+        catch {
+            console.error("modules-sync: error reading local-linked-modules.txt line ", line);
+        }
     }
 }
 
-try {
-    let fn = cwd+"/local-linked-modules.txt";
+let fn = cwd+"/local-linked-modules.txt";
+
+try {    
     if (fs.existsSync(fn)) {
         let txt = fs.readFileSync(fn).toString();
         readLocalTxt(txt);
@@ -64,11 +77,18 @@ try {
     console.error("module-linker error:", err);
 }
 
+///
+/// General functions
+///
+
+function prettyDir(dir){
+    return dir.replaceAll('\\','/').replaceAll('//','/');
+}
 
 ///
 /// Begin the modules sync
 ///
-console.log(mods);
+console.log("modules-sync: loaded modules from "+prettyDir(fn)+" ", mods);
 
 for(let m in mods){
     let mod = mods[m];
@@ -80,7 +100,7 @@ for(let m in mods){
         // To copy a folder or file, select overwrite accordingly
         try {
             fs.copySync(mod.origin, mod.module, { overwrite: false });
-            console.log('success!')
+            console.log('success', prettyDir(mod.module), 'creation');
         } catch (err) {
             console.error(err)
         }
@@ -103,15 +123,17 @@ for(let m in mods){
             ignoreEmptyLines: true       // Ignores differences caused by empty lines (similar to 'diff -B')
         };
 
+        let dirsAlreadyDone = [];
         let alreadyWorkingOn = false;
         function dirsCompareAndCopy(){
+
             if(alreadyWorkingOn) return;
             alreadyWorkingOn = true;
 
-            let dirsAlreadyDone = [];
+            try{
 
-            dircompare.compare(mod.origin, mod.module, options)
-            .then((res) => {
+                res = dircompare.compareSync(mod.origin, mod.module, options);
+
                 let dset = res.diffSet;
                 for(var file of dset){
                     let name = file.name1 || file.name2;
@@ -136,7 +158,7 @@ for(let m in mods){
                                     // file deleted
                                     let whereToDelete = (file.type1 == 'missing' ? mod.module : mod.origin) + path;
                                     
-                                    console.log("Deleted", path, "removing also", whereToDelete);
+                                    console.log("Deleted", prettyDir(path), "removing also", prettyDir(whereToDelete));
 
                                     fs.removeSync(whereToDelete);
                                     mod.db.removeFile(dbFile.id);
@@ -161,7 +183,7 @@ for(let m in mods){
                                 let to      = (dateOrigin > dateModule ? mod.module : mod.origin) + path;
 
                                 fs.copySync(from, to, { overwrite: true });
-                                console.log(from, "copied to", to);
+                                console.log(prettyDir(from), "copied to", prettyDir(to));
 
                                 if(type == 'dir')
                                     dirsAlreadyDone.push(path);
@@ -179,11 +201,11 @@ for(let m in mods){
                 }
 
                 alreadyWorkingOn = false;
-            })
-            .catch((error) => {
-                console.error(error);
+            }
+            catch(ex){
+                console.error("Error on module", prettyDir(mod.module), "\r\n", ex);
                 alreadyWorkingOn = false;
-            });
+            }
         }
 
         dirsCompareAndCopy();

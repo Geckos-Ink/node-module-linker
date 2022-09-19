@@ -1,7 +1,8 @@
 const sqlite3 = require('better-sqlite3');
 
 function verboseLog(what){
-    console.log(what);
+    if(global.talker)
+        console.log(what);
 }
 
 class ModuleDB {
@@ -10,7 +11,7 @@ class ModuleDB {
 
         if(global.talker) console.log('dirDB', dirDB);
         
-        this.db = sqlite3(dirDB, { verbose: global.talker ? verboseLog : null });
+        this.db = sqlite3(dirDB, { verbose: verboseLog });
         this._prepareTable();
     }
 
