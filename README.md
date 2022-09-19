@@ -46,6 +46,8 @@ There are no differences between using slash or backslash in the module path, bu
 
 - **A lot of bugs are possible (these are the first releases). Open the issue at the project repository link**: [Issues · Geckos-Ink/node-modules-sync · GitHub](https://github.com/Geckos-Ink/node-modules-sync/issues). ***Thank you!***
 
-### TODO
+
+
+#### todo:
 
 - You have to manually add an external git repository as submodule inside a git repository

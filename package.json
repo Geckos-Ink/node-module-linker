@@ -1,6 +1,6 @@
 {
   "name": "modules-sync",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Automatically synchronize git modules locally",
   "main": "src/index.js",
   "scripts": {
