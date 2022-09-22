@@ -37,7 +37,7 @@ function trimDir(dir){
         let lst = dir.length - 1;
 
         if(ignoreChars(dir[lst]))
-            dir = dir.substr(0,lst-1);
+            dir = dir.substr(0,lst);
         else 
             break;
     }
