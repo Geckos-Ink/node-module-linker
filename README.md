@@ -3,7 +3,7 @@
 ### Automatically synchronize modules or git submodules already present locally.
 Useful if you are working to a project and at the same time to a its module or git submodule on the same computer.
 
-This is a work in progress. **Version: 0.1.3**
+**Version: 0.2.0**
 
 ## Install
 
@@ -40,9 +40,23 @@ modules/module2/ => D:\Gits\module2\
 
 There are no differences between using slash or backslash in the module path, but is advised to use the operative system normal syntax in the origin path. Anyway, NodeJS is OS independent, it manages the difference automatically normally.
 
-### Notes
+### Global register
+You can add a directory to the global register for executing automatically multiple directories at the same time:
+> `~/MyProject$ modules-sync .` # also **+** is accepted  
 
-- Add to your project .gitignore ***local-linked-modules.txt***
+Then modules-sync will be executed in every registered directory launching the command anywhere:
+> `$ modules-sync run`
+
+You can remove a directory using the symbol argument **-**
+> `~/MyProject$ modules-sync -`
+
+You can check all registered directories using the argument **list** anywhere:
+> `$ modules-sync list`
+
+And you can remove (or add) a directory specifying **before the command** its path:
+> `$ modules-sync ~/MyProject -`
+
+### Notes
 
 - You could use the argument option *--modules-sync-talker* for making verbose more as possible modules-sync
 

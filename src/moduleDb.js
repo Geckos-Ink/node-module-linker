@@ -10,7 +10,7 @@ class ModuleDB {
     constructor(module){
         const baseDbDir = __dirname + '/DBs';
 
-        if(!fs.existsSync('DBs'))
+        if(!fs.existsSync(__dirname))
             fs.mkdir(baseDbDir);
 
         let dirDB = baseDbDir + '/mod_' + module.replaceAll(':','').replaceAll('\\','-').replaceAll('/','-').replaceAll('--','-').replaceAll('--','-')+'.db';

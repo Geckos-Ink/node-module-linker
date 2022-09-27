@@ -22,45 +22,73 @@ let justExec = true;
 
 let notDefaultArgs = false;
 
-let args = [...process.argv].splice(2);
-for(let arg of process.argv){ // set talket true if requested in arguments
+let args = [...process.argv];
+args.splice(0, 2);
+
+for(let arg of args){ // set talket true if requested in arguments
     if(arg == '--modules-sync-talker'){
         global.talker = true;
     }
-    else if(arg == '.'){
+    else if(arg == '.' || arg == '+'){
         justExec = false;
-        dirsPool.remember(cwd);
+        if(dirsPool.remember(cwd))
+            console.log("Modules at path", cwd, "registered!");
+        else 
+            console.log("Path already registered");
+    }
+    else if(arg == '-'){
+        justExec = false;
+
+        if(dirsPool.remove(cwd))
+            console.log("Path", cwd, "removed from global register");
+        else 
+            console.log("Nope,", cwd, "wasn't registered");
+    }
+    else if(arg == "list"){
+        justExec = false;
+
+        console.log("Globally registered directory are:");
+        for(let dir of dirsPool.list()){
+            console.log('- '+dir);
+        }
     }
     else if(arg == 'run'){
         justExec = false;
 
         const child_process = require('child_process');
         
-        for(var dir of dirsPool.list()){
+        for(let dir of dirsPool.list()){
             const child = child_process.execFile(
-                process.execPath,
-                finalArgs,
+                process.argv[1],
+                [], //arguments
                 {
                 env: process.env,
-                cwd: process.cwd(),
+                cwd: dir,
                 stdio: 'inherit'
                 }, (e, stdout, stderr) => {
-                console.log('process completed');
+
                 if (e) {
                     process.emit('uncaughtException', e);
                 }
             });
+
+            console.log('modules-sync on', dir);
           
             child.stdout.pipe(process.stdout);
             child.stderr.pipe(process.stderr);
         }
     }  
-    else 
+    else if(fs.existsSync(arg)){
+        cwd = arg;
+        process.chdir(cwd);
+    }
+    else
         notDefaultArgs = true;   
 }
 
 if(notDefaultArgs && fs.existsSync(args[0])){
-    process.chdir(args[0]);
+    cwd = args[0];
+    process.chdir(cwd);
 }
 
 function exec(){
