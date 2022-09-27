@@ -1,4 +1,5 @@
 const sqlite3 = require('better-sqlite3');
+const fs = require('fs-extra');
 
 function verboseLog(what){
     if(global.talker)
@@ -7,7 +8,12 @@ function verboseLog(what){
 
 class ModuleDB {
     constructor(module){
-        let dirDB = __dirname + '/DBs/mod_' + module.replaceAll(':','').replaceAll('\\','-').replaceAll('/','-').replaceAll('--','-').replaceAll('--','-')+'.db';
+        const baseDbDir = __dirname + '/DBs';
+
+        if(!fs.existsSync('DBs'))
+            fs.mkdir(baseDbDir);
+
+        let dirDB = baseDbDir + '/mod_' + module.replaceAll(':','').replaceAll('\\','-').replaceAll('/','-').replaceAll('--','-').replaceAll('--','-')+'.db';
 
         if(global.talker) console.log('dirDB', dirDB);
         
