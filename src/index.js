@@ -98,7 +98,7 @@ function exec(){
     let mods = {};
 
     ///
-    /// Read local-linked-modules.txt
+    /// Read modules-sync.txt
     ///
     function trimDir(dir){
         function ignoreChars(ch){
@@ -142,12 +142,12 @@ function exec(){
                 }
             }
             catch {
-                console.error("modules-sync: error reading local-linked-modules.txt line ", line);
+                console.error("modules-sync: error reading modules-sync.txt line ", line);
             }
         }
     }
 
-    let fn = cwd+"/local-linked-modules.txt";
+    let fn = cwd+"/modules-sync.txt";
 
     try {    
         if (fs.existsSync(fn)) {

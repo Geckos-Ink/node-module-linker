@@ -29,7 +29,7 @@ Then call it as service in the directory you need
 
 > `~/MyProject$ modules-sync`
 
-### local-linked-modules.txt example
+### modules-sync.txt example
 
 Create it at the root of your project. Every line is reserved to a module:
 
