@@ -40,6 +40,8 @@ modules/module2/ => D:\Gits\module2\
 
 There are no differences between using slash or backslash in the module path, but is advised to use the operative system normal syntax in the origin path. Anyway, NodeJS is OS independent, it manages the difference automatically normally.
 
+My advise is to add to .gitignore *modules-sync.txt* and creating a copy modules-sync.example.txt as reference.
+
 ### Global register
 You can add a directory to the global register for executing automatically multiple directories at the same time:
 > `~/MyProject$ modules-sync .` # also **+** is accepted  
